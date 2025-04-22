@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Donation Tracker</title>
+  <link rel="stylesheet" href="template.css">
+</head>
+<body>
+
+  <!-- Header -->
+
+  <header>
+
+    <h1>Donation Tracker</h1>
+
+    <!-- Navigation -->
+
+  </header>
+
+  <main>
+    <form id="donationForm">
+      <label for="charityName">Charity Name:</label><br>
+
+      <input type="text" id="charityName" name="charityName" placeholder= "Enter the charity name" required><br><br>
+
+      <label for="donationAmount">Donation Amount:</label><br>
+      <input type="number" id="donationAmount" name="donationAmount" placeholder= "Enter Donation Amount" required><br><br>
+
+      <label for="donationDate">Date of Donation:</label><br>
+      <input type="date" id="donationDate" name="donationDate" required><br><br>
+
+      <label for="donorMessage">Donor Message:</label><br>
+      <textarea id="donorMessage" name="donorMessage" rows="4" cols="50" placeholder="Write your message here..."></textarea><br><br>
+
+      <button type="submit">Submit Donation</button>
+    </form>
+
+    <div id="confirmationMessage"></div>
+
+  </main>
+
+    <!-- Footer -->
+     
+  <footer>
+    <script src="script.js"></script>
+  </footer>
+
+</body>
+</html>
