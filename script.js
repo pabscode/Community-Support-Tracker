@@ -53,7 +53,7 @@ function validateForm() {
     }
 
 // Checks that the first name is not empty or numbers
-const charityName = document.getElementById("name");
+const charityName = document.getElementById("charity-name");
 
 if (charityName.value === "") {
     showInputError(charityName, "Please enter a Charity name. ");
@@ -72,14 +72,15 @@ else if (!isNaN(charityName.value)) {
     const radioSelected4 = document.getElementById("option4");
     const radioSelected5 = document.getElementById("option5");
 
-    if (!radioSelected.checked && !radioSelected2.checked) {
+    if (!radioSelected.checked && !radioSelected2.checked && !radioSelected3.checked 
+        && !radioSelected4.checked && !radioSelected5.checked) {
         showInputError(radioSelected,"Please select an option.");
         isFormValid = false;
     }
 
 // Checks that the quantity is not empty or letters
 
-    const amountNumber = document.getElementById("quantity");
+    const amountNumber = document.getElementById("hours-quantity");
 
     if (amountNumber.value === "") {
         showInputError(amountNumber, "Please enter an number. ");
@@ -110,3 +111,14 @@ form.addEventListener("reset", (event) => {
     form.reset();
 
 });
+
+function storeData() {
+    let userName = document.getElementById("name")
+    let email = document.getElementById("email")
+    let charityName= document.getElementById("charity-name")
+    let experienceRating = document.getElementById("radio-options")
+    let volunteerHours = document.getElementById("hours-quantity")
+    let volunteerDate = document.getElementById("specificDate")
+
+    localStorage.setItem(userName, email, charityName, experienceRating,volunteerHours, volunteerDate);
+}
