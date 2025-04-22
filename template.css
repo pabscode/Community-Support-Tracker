@@ -1,0 +1,29 @@
+:root {
+    --primary_black: #171619;
+    --secondary_black: #212022;
+    --white: #F5F5F5;
+    --primary_color: #B880BD;
+    --hover_color: #A067A5;
+    --onclick_color: #C492C9;
+}
+
+body {
+    font-family: Ubuntu, Arial, Helvetica, sans-serif;
+    background-color: var(--primary_black);
+    color: var(--white);
+}
+
+button {
+    border: none;
+    border-radius: 0.3125em;
+    cursor: pointer;
+    background-color: var(--primary_color);
+}
+
+button:hover {
+    background-color: var(--hover_color);
+}
+
+button:active {
+    background-color: var(--onclick_color);
+}
