@@ -45,7 +45,7 @@ document.getElementById("submissionForm").addEventListener("submit", (event) => 
 
     if (validateForm()) {
         storeData();
-        console.log(charitySubmission)
+        //console.log(charitySubmission)
     } else {
         console.error("Form has errors");
     }
