@@ -13,7 +13,7 @@ form.addEventListener("submit", (event) => {
     }
 
     if (validateForm()) {
-        form.submit();
+        storeData();
     } else {
         console.error("Form has errors");
     }
@@ -120,5 +120,9 @@ function storeData() {
     let volunteerHours = document.getElementById("hours-quantity")
     let volunteerDate = document.getElementById("specificDate")
 
-    localStorage.setItem(userName, email, charityName, experienceRating,volunteerHours, volunteerDate);
+    let charitySubmission = [ { "userName": `${userName}`, "userEmail": `${email}`,
+         "charityName": `${charityName}`, "rating": `${experienceRating}`,
+          "volunteerHours": `${volunteerHours}`, "volunteerDate": `${volunteerDate}`}]
+
+    localStorage.setItem("charitysubmission", JSON.stringify(charitySubmission));
 }
