@@ -10,21 +10,25 @@
 
 #212022
 
+## Background Grey
+
+#353436
+
 ## White
 
 #F5F5F5
 
 ## Primary Color
 
-#B880BD
+#9c5da1
 
 ## Hover Color
 
-#a067a5
+#824886
 
 ## Onclick Color
 
-#c492c9
+#9b6ba0
 
 ## Font
 

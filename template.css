@@ -1,23 +1,38 @@
 :root {
     --primary_black: #171619;
     --secondary_black: #212022;
+    --background_grey: #353436;
     --white: #F5F5F5;
-    --primary_color: #B880BD;
-    --hover_color: #A067A5;
-    --onclick_color: #C492C9;
+    --primary_color: #9c5da1;
+    --hover_color: #824886;
+    --onclick_color: #9b6ba0;
 }
 
 body {
     font-family: Ubuntu, Arial, Helvetica, sans-serif;
     background-color: var(--primary_black);
     color: var(--white);
+    display: flex;
+    justify-content: center;
 }
 
-button {
+input, textarea {
+    border: none;
+    border-radius: 0.3125em;
+    cursor: pointer;
+    background-color: var(--background_grey);
+    font-family:inherit;
+    color: var(--white);
+}
+
+button, select {
+    font-family:inherit;
+    padding: 6px;
     border: none;
     border-radius: 0.3125em;
     cursor: pointer;
     background-color: var(--primary_color);
+    color: var(--white);
 }
 
 button:hover {
@@ -26,4 +41,14 @@ button:hover {
 
 button:active {
     background-color: var(--onclick_color);
+}
+
+form {
+    width: 100%;
+	max-width: 32.5em;
+	background: var(--secondary_black);
+	padding: 1.25em;
+	border-radius: 0.5em;
+	box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+	text-align: center;
 }
