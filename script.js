@@ -1,10 +1,9 @@
 const form = document.getElementById("submissionForm");
-
 /* 
 Submit button event listener that prevents default submission, clears previous
 error messages and verifies that the form is valid prior to submission.
 */ 
-form.addEventListener("submit", (event) => {
+document.getElementById("submissionForm").addEventListener("submit", (event) => {
     event.preventDefault();
 
     const errorMessages = document.querySelectorAll(".error-message");
@@ -14,6 +13,7 @@ form.addEventListener("submit", (event) => {
 
     if (validateForm()) {
         storeData();
+        console.log(charitySubmission)
     } else {
         console.error("Form has errors");
     }
@@ -113,16 +113,18 @@ form.addEventListener("reset", (event) => {
 });
 
 function storeData() {
-    let userName = document.getElementById("name")
-    let email = document.getElementById("email")
-    let charityName= document.getElementById("charity-name")
-    let experienceRating = document.getElementById("radio-options")
-    let volunteerHours = document.getElementById("hours-quantity")
-    let volunteerDate = document.getElementById("specificDate")
+    let userName = document.getElementById("name").value
+    let email = document.getElementById("email").value
+    let charityName= document.getElementById("charity-name").value
+    let experienceRating = document.querySelector('input[name="options"]:checked').value;
+    let volunteerHours = document.getElementById("hours-quantity").value
+    let volunteerDate = document.getElementById("specificDate").value
 
-    let charitySubmission = [ { "userName": `${userName}`, "userEmail": `${email}`,
+    const charitySubmission = { "userName": `${userName}`, "userEmail": `${email}`,
          "charityName": `${charityName}`, "rating": `${experienceRating}`,
-          "volunteerHours": `${volunteerHours}`, "volunteerDate": `${volunteerDate}`}]
+          "volunteerHours": `${volunteerHours}`, "volunteerDate": `${volunteerDate}`}
+    
+    console.log(charitySubmission)
 
-    localStorage.setItem("charitysubmission", JSON.stringify(charitySubmission));
+    // localStorage.setItem("charitysubmission", JSON.stringify(charitySubmission));
 }
