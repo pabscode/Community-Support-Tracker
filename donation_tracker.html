@@ -13,14 +13,14 @@
 
   <header>
 
-    <h1>Donation Tracker</h1>
-
     <!-- Navigation -->
 
   </header>
 
   <main>
     <form id="donationForm">
+      <h1>Donation Tracker</h1>
+
       <label for="charityName">Charity Name:</label><br>
 
       <input type="text" id="charityName" name="charityName" placeholder= "Enter the charity name" required><br><br>
@@ -35,14 +35,33 @@
       <textarea id="donorMessage" name="donorMessage" rows="4" cols="50" placeholder="Write your message here..."></textarea><br><br>
 
       <button type="submit">Submit Donation</button>
+      <div id="confirmationMessage"></div>
     </form>
+    <div>
+      <table>
+				<thead>
+					<tr>
+						<th>Charity Name</th>
+						<th>Donation Amount</th>
+            <th>Date of Donation</th>
+            <th>Donor Message</th>
+					</tr>
+				</thead>
+				<tbody id="donationTable">
 
-    <div id="confirmationMessage"></div>
+				</tbody>
+      </table>
+      <h3>Total Donations</h3>
+      <div id="donationTotal">
+
+      </div>
+
+    
 
   </main>
 
     <!-- Footer -->
-     
+
   <footer>
     <script src="script.js"></script>
   </footer>
