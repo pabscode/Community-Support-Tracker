@@ -93,13 +93,12 @@ function loadVolunteerHistory(){
             
             tableEntry.appendChild(charityItem);
 
-            console.log(key)
-            if(String(key) == "hoursWorked")
+            if(String(key) == "hoursWorked");
                 totalHours += Number(value);
         }
 
-        const deleteButton = document.createElement("button")
-        deleteButton.innerText = "Delete"
+        const deleteButton = document.createElement("button");
+        deleteButton.innerText = "Delete";
         tableEntry.appendChild(deleteButton);
 
         deleteButton.addEventListener("click", () =>{
@@ -119,7 +118,7 @@ function loadVolunteerHistory(){
             loadVolunteerHistory();
         })
 
-        table.appendChild(tableEntry)
+        table.appendChild(tableEntry);
         console.log(localStorage.getItem("volunteerEntries"));
     }
     totalHoursText.innerText = totalHours;
