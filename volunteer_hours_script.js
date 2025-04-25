@@ -69,23 +69,33 @@ function saveVolunteerEntry(charity, hoursWorked, dateWorked, rating){
 function loadVolunteerHistory(){
     let volunteerEntryString = localStorage.getItem("volunteerEntries");
 
+    const totalHoursText = document.getElementById("total-hours");
+
+    let totalHours = 0;
+    totalHoursText.innerText = 0;
+
     if(volunteerEntryString === null)
         return;
 
     let volunteerHistory = JSON.parse(volunteerEntryString).volunteerEntries;
 
     const table = document.getElementById("history-logs");
+    
     table.innerHTML = "";
 
     for(let i = 0; i < volunteerHistory.length; i++){
         const tableEntry = document.createElement("tr");
-        
+
         for(const key in volunteerHistory[i]){
             const value = volunteerHistory[i][key];
             const charityItem = document.createElement("td");
             charityItem.innerText = value;
             
             tableEntry.appendChild(charityItem);
+
+            console.log(key)
+            if(String(key) == "hoursWorked")
+                totalHours += Number(value);
         }
 
         const deleteButton = document.createElement("button")
@@ -104,7 +114,6 @@ function loadVolunteerHistory(){
                     ${JSON.stringify(volunteerHistory)}}`);
                 console.log(localStorage.getItem("volunteerEntries"));
             }
-
             //reloading the volunteer history will ensure the indexes
             //are up to date and not deleting the wrong elements.
             loadVolunteerHistory();
@@ -113,4 +122,5 @@ function loadVolunteerHistory(){
         table.appendChild(tableEntry)
         console.log(localStorage.getItem("volunteerEntries"));
     }
+    totalHoursText.innerText = totalHours;
 }
