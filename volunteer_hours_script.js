@@ -17,7 +17,7 @@ document.getElementById("submissionForm").addEventListener("submit", (event) => 
         alert("Please fill out all required fields correctly. Volunteer Hours amount must be a positive number.");
         return;
     }
-    saveVolunteerEntry(userName, email, charityName, volunteerHours,
+    saveVolunteerEntry(charityName, volunteerHours,
                        volunteerDate, experienceRating);
     loadVolunteerHistory();
 });
@@ -47,7 +47,7 @@ form.addEventListener("reset", () => {
 //     }
 // }
 
-function saveVolunteerEntry(username, email, charity, hoursWorked, dateWorked, rating){
+function saveVolunteerEntry(charity, hoursWorked, dateWorked, rating){
     if(localStorage.getItem("volunteerEntries") === null)
     {
         localStorage.setItem("volunteerEntries", `{"volunteerEntries":
@@ -67,12 +67,12 @@ function saveVolunteerEntry(username, email, charity, hoursWorked, dateWorked, r
 }
 
 function loadVolunteerHistory(){
-    let volunteerEntryObject = localStorage.getItem("volunteerEntries");
+    let volunteerEntryString = localStorage.getItem("volunteerEntries");
 
-    if(volunteerEntryObject === null)
+    if(volunteerEntryString === null)
         return;
 
-    let volunteerHistory = JSON.parse(volunteerEntryObject).volunteerEntries;
+    let volunteerHistory = JSON.parse(volunteerEntryString).volunteerEntries;
 
     const table = document.getElementById("history-logs");
     table.innerHTML = "";
@@ -94,8 +94,23 @@ function loadVolunteerHistory(){
 
         deleteButton.addEventListener("click", () =>{
             tableEntry.remove();
+
+            volunteerHistory.splice(i, 1);
+            if(volunteerHistory.length == 0){
+                localStorage.removeItem("volunteerEntries");
+            }
+            else{
+                localStorage.setItem("volunteerEntries", `{"volunteerEntries":
+                    ${JSON.stringify(volunteerHistory)}}`);
+                console.log(localStorage.getItem("volunteerEntries"));
+            }
+
+            //reloading the volunteer history will ensure the indexes
+            //are up to date and not deleting the wrong elements.
+            loadVolunteerHistory();
         })
 
         table.appendChild(tableEntry)
+        console.log(localStorage.getItem("volunteerEntries"));
     }
 }
