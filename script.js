@@ -1,3 +1,11 @@
+function setLocalStorage(key, value) {
+    localStorage.setItem(key, value);
+}
+
+function getLocalStorage(key) {
+    return localStorage.getItem(key);
+}
+
 // Event Listener for the donationForm
 
 document.getElementById("donationForm").addEventListener("submit", (event) => {
@@ -10,7 +18,6 @@ document.getElementById("donationForm").addEventListener("submit", (event) => {
     const donationAmount = parseFloat(document.getElementById("donationAmount").value);
     const donationDate = document.getElementById("donationDate").value;
     const donorMessage = document.getElementById("donorMessage").value.trim();
-
 
     if (!charityName || isNaN(donationAmount) || donationAmount <= 0 || !donationDate) {
         alert("Please fill out all required fields correctly. Donation amount must be a positive number.");
@@ -25,37 +32,235 @@ document.getElementById("donationForm").addEventListener("submit", (event) => {
         donorMessage: donorMessage
     }
 
+    saveDonations(charityName, donationAmount, donationDate, donorMessage);
+    displayDonations();
+    displayTotalDonations()
+
     document.getElementById("confirmationMessage").innerText = "Donation Sent!";
 
     console.log("Donation Data", donationData)
 });
 
-const form = document.getElementById("submissionForm");
+function saveDonations(charityName, donationAmount, donationData, donorMessage){
 
+    if (localStorage.getItem("donations") === null) {
+        localStorage.setItem("donations", `{"donations":[{"charityName":`
+            + `"${charityName}","donationAmount":"${donationAmount}", `
+            + `"donationData":"${donationData}", "donorMessage":`
+            + `"${donorMessage}"}]}`);
+    } else {
+        let JsonObjectString = localStorage.getItem("donations");
+        console.log(JsonObjectString)
+        let jsonObject = JSON.parse(JsonObjectString);
+        let newJsonObjectEntry = JSON.parse(`{"charityName":`
+            + `"${charityName}","donationAmount":"${donationAmount}", `
+            + `"donationData":"${donationData}", "donorMessage":`
+            + `"${donorMessage}"}`);
+        jsonObject.donations.push(newJsonObjectEntry);
+        console.log(jsonObject.donations);
+        localStorage.setItem("donations", JSON.stringify(jsonObject));
+    }
+}
+
+function displayDonations() {
+	let getDonations = getLocalStorage("donations");
+	let donationsTable = document.getElementById("donationTable");
+    donationsTable.innerHTML = ""
+
+    if (!getDonations) {
+		console.warn("No donations found in local storage.");
+		return;
+	}
+
+	let donationsJson = JSON.parse(getDonations);
+
+	let donationsList = donationsJson.donations
+
+	donationsList.forEach((donations) => {
+
+		let {charityName, donationAmount, donationDate, donorMessage} = donations
+		console.log(donationDate)
+		let row = document.createElement("tr");
+
+        let charityNameCell = document.createElement("td");
+        charityNameCell.textContent = charityName;
+
+		let donationAmountCell = document.createElement("td");
+		donationAmountCell.textContent = `$${donationAmount}`;
+
+		let donationDateCell = document.createElement("td");
+		donationDateCell.textContent = donationDate;
+
+        let donorMessageCell = document.createElement("td");
+        donorMessageCell.textContent = donorMessage;
+
+        row.appendChild(charityNameCell);
+		row.appendChild(donationAmountCell);
+		row.appendChild(donationDateCell);
+        row.appendChild(donorMessageCell);
+
+		donationsTable.appendChild(row);
+	})
+}
+
+function displayTotalDonations() {
+    let getDonations = getLocalStorage("donations");
+	let donationsTotal = document.getElementById("donationTotal");
+    donationsTotal.innerHTML = ""
+
+    totalDonationCount = 0
+
+    if (!getDonations) {
+		console.warn("No donations found in local storage.");
+		return;
+	}
+
+	let donationsJson = JSON.parse(getDonations);
+
+	let donationsList = donationsJson.donations
+
+	donationsList.forEach((donations) => {
+        let {donationAmount} = donations
+
+        donationAmount = parseInt(donationAmount)
+
+        totalDonationCount += donationAmount
+	})
+
+    let totalDonationCell = document.createElement("h4");
+	totalDonationCell.textContent = `$${totalDonationCount}`;
+
+    donationsTotal.appendChild(totalDonationCell)
+}
+
+
+const form = document.getElementById("submissionForm");
+/* 
+Submit button event listener that prevents default submission, clears previous
+error messages and verifies that the form is valid prior to submission.
+*/ 
 document.getElementById("submissionForm").addEventListener("submit", (event) => {
     event.preventDefault();
 
-    const userName = document.getElementById("name").value.trim();
-    const email = document.getElementById("email").value.trim();
-    const emailPattern = /.+@.+\..+/;
-    const charityName= document.getElementById("charity-name").value.trim();
-    const experienceRating = document.querySelector('input[name="options"]:checked').value;
-    const volunteerHours = document.getElementById("hours-quantity").value
-    const volunteerDate = document.getElementById("specificDate").value
-
-    if (!userName || !isNaN(userName) || !email || emailPattern.test(email) || !charityName || !experienceRating 
-        || experienceRating === null || isNaN(volunteerHours) || !volunteerDate ) {
-        alert("Please fill out all required fields correctly. Volunteer Hours amount must be a positive number.");
-        return;
+    const errorMessages = document.querySelectorAll(".error-message");
+    for (const el of errorMessages) {
+        el.remove();
     }
 
-    const charitySubmission = { "userName": `${userName}`, "userEmail": `${email}`,
-        "charityName": `${charityName}`, "rating": `${experienceRating}`,
-        "volunteerHours": `${volunteerHours}`, "volunteerDate": `${volunteerDate}`}
-
-    console.log(charitySubmission)
+    if (validateForm()) {
+        storeData();
+        //console.log(charitySubmission)
+    } else {
+        console.error("Form has errors");
+    }
 });
+
+// different input checking for the form
+function validateForm() {
+    let isFormValid = true;
+
+// Checks that the first name is not empty or numbers
+    const userName = document.getElementById("name");
+
+    if (userName.value === "") {
+        showInputError(userName, "Please enter a first name. ");
+        isFormValid = false;
+    }
+
+    else if (!isNaN(userName.value)) {
+        showInputError(userName, "Please use letters. ");
+        isFormValid = false;
+    }
+// Validates the email entered
+
+    const emailInputElement = document.getElementById("email");
+    const emailInputValue = emailInputElement.value;
+
+    const emailPattern = /.+@.+\..+/;
+
+    if (emailInputElement.value === "") {
+        showInputError(emailInputElement, "Please enter an email address. ");
+        isFormValid = false;
+    }
+
+    else if (!emailPattern.test(emailInputValue)) {
+        showInputError(emailInputElement, "Please enter a valid email address.");
+        isFormValid = false;
+    }
+
+// Checks that the first name is not empty or numbers
+const charityName = document.getElementById("charity-name");
+
+if (charityName.value === "") {
+    showInputError(charityName, "Please enter a Charity name. ");
+    isFormValid = false;
+}
+
+else if (!isNaN(charityName.value)) {
+    showInputError(charityName, "Please use letters. ");
+    isFormValid = false;
+}
+
+// Validates Radio Buttons
+    const radioSelected = document.getElementById("option1"); 
+    const radioSelected2 = document.getElementById("option2");
+    const radioSelected3 = document.getElementById("option3");
+    const radioSelected4 = document.getElementById("option4");
+    const radioSelected5 = document.getElementById("option5");
+
+    if (!radioSelected.checked && !radioSelected2.checked && !radioSelected3.checked 
+        && !radioSelected4.checked && !radioSelected5.checked) {
+        showInputError(radioSelected,"Please select an option.");
+        isFormValid = false;
+    }
+
+// Checks that the quantity is not empty or letters
+
+    const amountNumber = document.getElementById("hours-quantity");
+
+    if (amountNumber.value === "") {
+        showInputError(amountNumber, "Please enter an number. ");
+        isFormValid = false;
+    }
+
+    return isFormValid;
+}
+
+// Appends the error messages
+function showInputError(inputElement, message) {
+    const container = inputElement.closest(".input-container");
+    const errorDisplay = document.createElement("span");
+    errorDisplay.innerText = message;
+    errorDisplay.className = "error-message";
+    errorDisplay.setAttribute("role", "alert");
+
+    container.appendChild(errorDisplay);
+}
 
 form.addEventListener("reset", (event) => {
+
+    const errorMessages = document.querySelectorAll(".error-message");
+    for (const el of errorMessages) {
+        el.remove();
+    }
+
     form.reset();
+
 });
+
+function storeData() {
+    let userName = document.getElementById("name").value
+    let email = document.getElementById("email").value
+    let charityName= document.getElementById("charity-name").value
+    let experienceRating = document.querySelector('input[name="options"]:checked').value;
+    let volunteerHours = document.getElementById("hours-quantity").value
+    let volunteerDate = document.getElementById("specificDate").value
+
+    const charitySubmission = { "userName": `${userName}`, "userEmail": `${email}`,
+         "charityName": `${charityName}`, "rating": `${experienceRating}`,
+          "volunteerHours": `${volunteerHours}`, "volunteerDate": `${volunteerDate}`}
+    
+    console.log(charitySubmission)
+
+    // localStorage.setItem("charitysubmission", JSON.stringify(charitySubmission));
+}
