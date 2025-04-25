@@ -19,7 +19,6 @@ body {
 input, textarea {
     border: none;
     border-radius: 0.3125em;
-    cursor: pointer;
     background-color: var(--background_grey);
     font-family:inherit;
     color: var(--white);

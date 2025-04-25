@@ -24,11 +24,11 @@ document.getElementById("donationForm").addEventListener("submit", (event) => {
         return;
     }
 
-    const donationData = {
+    const donationEntries = {
         charityName: charityName,
         //formats the string into two decimal places
         donationAmount: donationAmount.toFixed(2),
-        donationDate: donationDate,
+        donationDate: String(donationDate),
         donorMessage: donorMessage
     }
 
@@ -38,15 +38,15 @@ document.getElementById("donationForm").addEventListener("submit", (event) => {
 
     document.getElementById("confirmationMessage").innerText = "Donation Sent!";
 
-    console.log("Donation Data", donationData)
+    console.log("Donation Data", donationEntries)
 });
 
-function saveDonations(charityName, donationAmount, donationData, donorMessage){
+function saveDonations(charityName, donationAmount, donationDate, donorMessage){
 
     if (localStorage.getItem("donations") === null) {
         localStorage.setItem("donations", `{"donations":[{"charityName":`
             + `"${charityName}","donationAmount":"${donationAmount}", `
-            + `"donationData":"${donationData}", "donorMessage":`
+            + `"donationDate":"${donationDate}", "donorMessage":`
             + `"${donorMessage}"}]}`);
     } else {
         let JsonObjectString = localStorage.getItem("donations");
@@ -54,7 +54,7 @@ function saveDonations(charityName, donationAmount, donationData, donorMessage){
         let jsonObject = JSON.parse(JsonObjectString);
         let newJsonObjectEntry = JSON.parse(`{"charityName":`
             + `"${charityName}","donationAmount":"${donationAmount}", `
-            + `"donationData":"${donationData}", "donorMessage":`
+            + `"donationDate":"${donationDate}", "donorMessage":`
             + `"${donorMessage}"}`);
         jsonObject.donations.push(newJsonObjectEntry);
         console.log(jsonObject.donations);
@@ -64,8 +64,9 @@ function saveDonations(charityName, donationAmount, donationData, donorMessage){
 
 function displayDonations() {
 	let getDonations = getLocalStorage("donations");
-	let donationsTable = document.getElementById("donationTable");
+	const donationsTable = document.getElementById("donationTable");
     donationsTable.innerHTML = ""
+    idValue = 0
 
     if (!getDonations) {
 		console.warn("No donations found in local storage.");
@@ -73,12 +74,10 @@ function displayDonations() {
 	}
 
 	let donationsJson = JSON.parse(getDonations);
+    let donationsList = donationsJson.donations
 
-	let donationsList = donationsJson.donations
-
-	donationsList.forEach((donations) => {
-
-		let {charityName, donationAmount, donationDate, donorMessage} = donations
+	for (let i = 0; i < donationsList.length; i++) {
+		let {charityName, donationAmount, donationDate, donorMessage} = donationsList[i]
 		console.log(donationDate)
 		let row = document.createElement("tr");
 
@@ -94,21 +93,42 @@ function displayDonations() {
         let donorMessageCell = document.createElement("td");
         donorMessageCell.textContent = donorMessage;
 
+        let deleteButton = document.createElement("button");
+        deleteButton.textContent = "Delete"
+        deleteButton.id = idValue
+
         row.appendChild(charityNameCell);
 		row.appendChild(donationAmountCell);
 		row.appendChild(donationDateCell);
         row.appendChild(donorMessageCell);
+        row.appendChild(deleteButton);
 
 		donationsTable.appendChild(row);
-	})
+
+        idValue += 1
+
+        deleteButton.addEventListener("click", (deletion) => {
+            row.remove()
+
+            donationsList.splice(i, 1)
+            if (donationsList.length == 0) {
+                localStorage.removeItem("donations")
+            } else {
+                localStorage.setItem("donations", `{"donations":
+                    ${JSON.stringify(donationsList)}}`);
+            }
+            displayDonations();
+            displayTotalDonations();
+        })
+	}
 }
 
 function displayTotalDonations() {
     let getDonations = getLocalStorage("donations");
-	let donationsTotal = document.getElementById("donationTotal");
+	const donationsTotal = document.getElementById("donationTotal");
     donationsTotal.innerHTML = ""
 
-    totalDonationCount = 0
+    let totalDonationCount = 0
 
     if (!getDonations) {
 		console.warn("No donations found in local storage.");
@@ -132,7 +152,6 @@ function displayTotalDonations() {
 
     donationsTotal.appendChild(totalDonationCell)
 }
-
 
 const form = document.getElementById("submissionForm");
 /* 
