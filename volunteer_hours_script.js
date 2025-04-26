@@ -78,8 +78,9 @@ function loadVolunteerHistory(){
             
             tableEntry.appendChild(charityItem);
 
-            if(String(key) == "hoursWorked");
+            if(String(key) == "hoursWorked"){
                 totalHours += parseInt(value);
+            }
         }
 
         const deleteButton = document.createElement("button");
