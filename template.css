@@ -13,19 +13,58 @@ body {
     background-color: var(--primary_black);
     color: var(--white);
     display: flex;
-    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+}
+
+main {
+    margin-top: 3em;
+    width: 100%;
+	max-width: 50em;
+	background: var(--secondary_black);
+	padding: 1.25em;
+	border-radius: 0.5em;
+	box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+	text-align: left;
+    font-size: large;
+}
+
+div {
+    margin-top: 1em;
+}
+
+header {
+    position: fixed;
+    background: var(--secondary_black);
+    padding: 0.5em;
+    text-align: center;
+    top: 0;
+    width: 100%;
 }
 
 input, textarea {
     border: none;
     border-radius: 0.3125em;
+    padding: 3px;
+    margin-top: 5px;
     background-color: var(--background_grey);
     font-family:inherit;
     color: var(--white);
+    font-size: inherit;
+}
+
+#radio-options > input {
+    margin-top: 10px;
+}
+
+h4 {
+    padding: 3px;
 }
 
 button, select {
     font-family:inherit;
+    font-size: inherit;
+    margin: 2px;
     padding: 6px;
     border: none;
     border-radius: 0.3125em;
@@ -42,12 +81,6 @@ button:active {
     background-color: var(--onclick_color);
 }
 
-form {
+table {
     width: 100%;
-	max-width: 32.5em;
-	background: var(--secondary_black);
-	padding: 1.25em;
-	border-radius: 0.5em;
-	box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-	text-align: center;
 }

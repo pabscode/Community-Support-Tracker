@@ -26,26 +26,10 @@ form.addEventListener("reset", () => {
     form.reset();
 });
 
-// function saveVolunteerEntry(username, email, charity, hoursWorked, dateWorked, rating){
-//     if(localStorage.getItem("volunteerEntries") === null)
-//     {
-//         localStorage.setItem("volunteerEntries", `{"volunteerEntries":
-//             [{"username":"${username}","email":"${email}",
-//             "charity":"${charity}","hoursWorked":"${hoursWorked}",
-//             "dateWorked":"${dateWorked}","rating":"${rating}"}]}`);
-//     }
-//     else{
-//         let jsonString = localStorage.getItem("volunteerEntries");
-//         let jsonObject = JSON.parse(jsonString);
-//         let newJsonEntry = JSON.parse(`{"username":"${username}","email":"${email}",
-//                                       "charity":"${charity}","hoursWorked":"${hoursWorked}",
-//                                       "dateWorked":"${dateWorked}","rating":"${rating}"}`);
-
-//         jsonObject.volunteerEntries.push(newJsonEntry);
-//         console.log(jsonObject.volunteerEntries);
-//         localStorage.setItem("volunteerEntries", JSON.stringify(jsonObject));
-//     }
-// }
+const switchPageButton = document.getElementById("switch-page");
+switchPageButton.addEventListener("click", () => {
+    window.location.href="donation_tracker.html"
+})
 
 function saveVolunteerEntry(charity, hoursWorked, dateWorked, rating){
     if(localStorage.getItem("volunteerEntries") === null)
@@ -71,8 +55,8 @@ function loadVolunteerHistory(){
 
     const totalHoursText = document.getElementById("total-hours");
 
-    let totalHours = 0;
-    totalHoursText.innerText = 0;
+    
+    totalHoursText.innerText = "Total Hours: 0";
 
     if(volunteerEntryString === null)
         return;
@@ -83,6 +67,7 @@ function loadVolunteerHistory(){
     
     table.innerHTML = "";
 
+    let totalHours = 0;
     for(let i = 0; i < volunteerHistory.length; i++){
         const tableEntry = document.createElement("tr");
 
@@ -94,7 +79,7 @@ function loadVolunteerHistory(){
             tableEntry.appendChild(charityItem);
 
             if(String(key) == "hoursWorked");
-                totalHours += Number(value);
+                totalHours += parseInt(value);
         }
 
         const deleteButton = document.createElement("button");
@@ -121,5 +106,5 @@ function loadVolunteerHistory(){
         table.appendChild(tableEntry);
         console.log(localStorage.getItem("volunteerEntries"));
     }
-    totalHoursText.innerText = totalHours;
+    totalHoursText.innerText = `Total Hours: ${totalHours}`;
 }

@@ -6,6 +6,8 @@ function getLocalStorage(key) {
     return localStorage.getItem(key);
 }
 
+displayDonations();
+
 // Event Listener for the donationForm
 
 document.getElementById("donationForm").addEventListener("submit", (event) => {
@@ -40,6 +42,11 @@ document.getElementById("donationForm").addEventListener("submit", (event) => {
 
     console.log("Donation Data", donationEntries)
 });
+
+const switchPageButton = document.getElementById("switch-page");
+switchPageButton.addEventListener("click", () => {
+    window.location.href="volunteer_hours.html"
+})
 
 function saveDonations(charityName, donationAmount, donationDate, donorMessage){
 
